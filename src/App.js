@@ -10,6 +10,7 @@ import PatientDashboard from "./Patient/PatientDashboard";
 import AdminDashboard from "./Admin/AdminDashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Error from "./Components/Error";
+import ViewDoctors from "./Patient/ViewDoctors";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
 
           <Route path="/patientDashboard" element={
               <ProtectedRoute>
-              <PatientDashboard/>
+              <PatientDashboard element={<ViewDoctors/>}/>
               </ProtectedRoute>
               } />
           <Route path="/adminDashboard" element={
@@ -35,6 +36,12 @@ function App() {
 
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+
+        <Route path="/viewdoctors" element={
+            <ProtectedRoute>
+            <ViewDoctors/>
+            </ProtectedRoute>} />
+
       </Routes>
             {/* FOOTER */}
         <footer className="bg-dark text-white text-center py-3 mt-auto">
