@@ -1,12 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { useState } from 'react';
-import {Link} from "react-router";
+import {Link, useNavigate} from "react-router";
 
 function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
     async function handleLogin(e) {
         e.preventDefault();
 
@@ -29,12 +30,38 @@ function Login(props) {
             .then((response) => {
                 console.log(JSON.stringify(response.data));
                 localStorage.setItem("token", response.data.token);
+                checkLoginStatus();
+
 
             })
             .catch((error) => {
                 console.log(error);
                 setError('Invalid username or password');
             });
+    }
+    function checkLoginStatus(){
+        let config = {
+          method: 'get',
+          maxBodyLength: Infinity,
+          url: 'http://127.0.0.1:8000/me/',
+          headers: {
+            'Authorization': `Token ${localStorage.getItem("token")}`
+          }
+        };
+
+        axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data.is_staff));
+          if(response.data.is_staff){
+            navigate('/adminDashboard');
+          }else{
+            navigate('/patientDashboard');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
     }
     return (
 

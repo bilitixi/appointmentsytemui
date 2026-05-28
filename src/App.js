@@ -5,6 +5,11 @@ import Login from './Registration/Login';
 import Register from './Registration/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "./Components/Navigation";
+import Options from "./Components/Options";
+import PatientDashboard from "./Patient/PatientDashboard";
+import AdminDashboard from "./Admin/AdminDashboard";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import Error from "./Components/Error";
 
 function App() {
   return (
@@ -12,7 +17,22 @@ function App() {
 
       <BrowserRouter>
       <Navigation/>
+
+
       <Routes>
+          <Route path="/" element={<Options/>} />
+          <Route path="/error" element={<Error/>} />
+
+          <Route path="/patientDashboard" element={
+              <ProtectedRoute>
+              <PatientDashboard/>
+              </ProtectedRoute>
+              } />
+          <Route path="/adminDashboard" element={
+              <ProtectedRoute>
+              <AdminDashboard/>
+             </ProtectedRoute>} />
+
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
       </Routes>
