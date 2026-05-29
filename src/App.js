@@ -12,6 +12,7 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 import Error from "./Components/Error";
 import ViewDoctors from "./Patient/ViewDoctors";
 import BookAppointment from "./Patient/BookAppointment";
+import ViewAppointments from "./Patient/ViewAppointments";
 
 function App() {
   return (
@@ -28,8 +29,7 @@ function App() {
           <Route path="/patientDashboard" element={
               <ProtectedRoute>
               <PatientDashboard/>
-              </ProtectedRoute>}>
-          </Route>
+              </ProtectedRoute>}/>
 
           <Route path="/viewdoctors" element={
               <ProtectedRoute>
@@ -44,7 +44,12 @@ function App() {
           <Route path="/adminDashboard" element={
               <ProtectedRoute>
               <AdminDashboard/>
-              </ProtectedRoute>} />
+              </ProtectedRoute>}/>
+
+          <Route path="/viewAppointments" element={
+              <ProtectedRoute>
+              <ViewAppointments/>
+              </ProtectedRoute>}/>
 
 
 

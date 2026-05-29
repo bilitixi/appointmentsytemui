@@ -97,7 +97,7 @@ function PatientDashboard(props) {
                             </p>
 
                             <Link
-                                to="/myAppointments"
+                                to="/viewAppointments"
                                 className="btn btn-warning"
                             >
                                 View Appointments
