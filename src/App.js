@@ -26,21 +26,25 @@ function App() {
 
           <Route path="/patientDashboard" element={
               <ProtectedRoute>
-              <PatientDashboard element={<ViewDoctors/>}/>
-              </ProtectedRoute>
-              } />
+              <PatientDashboard/>
+              </ProtectedRoute>}>
+          </Route>
+
+          <Route path="/viewdoctors" element={
+              <ProtectedRoute>
+              <ViewDoctors/>
+              </ProtectedRoute>}/>
+
+
           <Route path="/adminDashboard" element={
               <ProtectedRoute>
               <AdminDashboard/>
-             </ProtectedRoute>} />
+              </ProtectedRoute>} />
+
 
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
 
-        <Route path="/viewdoctors" element={
-            <ProtectedRoute>
-            <ViewDoctors/>
-            </ProtectedRoute>} />
 
       </Routes>
             {/* FOOTER */}
