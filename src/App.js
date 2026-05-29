@@ -11,6 +11,7 @@ import AdminDashboard from "./Admin/AdminDashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Error from "./Components/Error";
 import ViewDoctors from "./Patient/ViewDoctors";
+import BookAppointment from "./Patient/BookAppointment";
 
 function App() {
   return (
@@ -34,12 +35,17 @@ function App() {
               <ProtectedRoute>
               <ViewDoctors/>
               </ProtectedRoute>}/>
+           <Route path="/bookAppointment" element={
+              <ProtectedRoute>
+              <BookAppointment/>
+              </ProtectedRoute>} />
 
 
           <Route path="/adminDashboard" element={
               <ProtectedRoute>
               <AdminDashboard/>
               </ProtectedRoute>} />
+
 
 
         <Route path="/login" element={<Login/>} />
