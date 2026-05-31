@@ -1,19 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router";
 
-function DoctorForm() {
+function PatientForm() {
   const navigate = useNavigate();
-  const { id } = useParams(); // will exist when editing
+  const { id } = useParams();
 
-
-  const [doctor, setDoctor] = useState({
+  const [patient, setPatient] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     date_of_birth: "",
     address: "",
-    speciality: "",
   });
   function parseErrors(error) {
 
@@ -32,91 +30,84 @@ function DoctorForm() {
     });
 }
 
-
   const handleChange = (e) => {
-    setDoctor({
-      ...doctor,
+    setPatient({
+      ...patient,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const config = {
-      headers: {
-        Authorization: `Token ${localStorage.getItem("token")}`,
-      },
-    };
-
-    try {
-      if (id) {
-        // Update existing doctor
-        await axios.put(
-          `http://127.0.0.1:8000/doctors/${id}/`,
-          doctor,
-          config
-        );
-        alert("Doctor updated successfully");
-      } else {
-        // Create new doctor
-        await axios.post(
-          "http://127.0.0.1:8000/doctors/",
-          doctor,
-          config
-        );
-         alert("Doctor created successfully");
-      }
 
 
-      navigate("/managedoctors");
-    } catch (error) {
-      const errors = parseErrors(error);
-      alert(errors.join("\n"));
-      console.error(error);
-    }
-  };
   useEffect(() => {
-  if (!id) return; // Add mode, don't load anything
+    if (id) {
+        const loadPatient = async () => {
+            try {
+              const response = await axios.get(
+                `http://127.0.0.1:8000/patients/${id}/`,
+                {
+                  headers: {
+                    Authorization: `Token ${localStorage.getItem("token")}`,
+                  },
+                }
+              );
 
-  const loadDoctor = async () => {
-    try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/doctors/${id}/`,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+              setPatient(response.data);
+            } catch (error) {
 
-      setDoctor(response.data);
-    } catch (error) {
-      console.error(error);
-
+              console.error(error);
+            }
+          };
+      loadPatient();
     }
-  };
+  }, [id]);
 
-  loadDoctor();
-}, [id]);
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      const config = {
+          headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+      };
+
+
+          try {
+              await axios.put(
+                  `http://127.0.0.1:8000/patients/${id}/`,
+                  patient,
+                  config
+              );
+              alert("Patient updated successfully");
+              navigate("/managepatients");
+          } catch (error) {
+              const errors = parseErrors(error);
+              alert(errors.join("\n"));
+              console.error(error);
+
+          }
+
+
+
+  }
+
 
   return (
     <div className="container py-5">
       <div className="card shadow-sm">
         <div className="card-body">
-          <h3 className="mb-4">
-            {id ? "Edit Doctor" : "Add Doctor"}
-          </h3>
+          <h3 className="mb-4">Edit Patient</h3>
 
           <form onSubmit={handleSubmit}>
             <div className="row g-3">
+
               <div className="col-md-6">
                 <label className="form-label">First Name</label>
                 <input
                   type="text"
                   name="firstName"
                   className="form-control"
-                  value={doctor.firstName}
+                  value={patient.firstName}
                   onChange={handleChange}
                 />
               </div>
@@ -127,7 +118,7 @@ function DoctorForm() {
                   type="text"
                   name="lastName"
                   className="form-control"
-                  value={doctor.lastName}
+                  value={patient.lastName}
                   onChange={handleChange}
                 />
               </div>
@@ -138,7 +129,7 @@ function DoctorForm() {
                   type="text"
                   name="phone"
                   className="form-control"
-                  value={doctor.phone}
+                  value={patient.phone}
                   onChange={handleChange}
                 />
               </div>
@@ -149,7 +140,7 @@ function DoctorForm() {
                   type="date"
                   name="date_of_birth"
                   className="form-control"
-                  value={doctor.date_of_birth}
+                  value={patient.date_of_birth}
                   onChange={handleChange}
                 />
               </div>
@@ -160,38 +151,23 @@ function DoctorForm() {
                   name="address"
                   className="form-control"
                   rows="3"
-                  value={doctor.address}
+                  value={patient.address}
                   onChange={handleChange}
                 />
               </div>
 
-              <div className="col-12">
-                <label className="form-label">Speciality</label>
-                <input
-                  type="text"
-                  name="speciality"
-                  className="form-control"
-                  value={doctor.speciality}
-                  onChange={handleChange}
-                />
-              </div>
             </div>
 
             <div className="mt-4 d-flex justify-content-between">
-              <Link
-                to="/managedoctors"
-                className="btn btn-secondary"
-              >
+              <Link to="/managepatients" className="btn btn-secondary">
                 Cancel
               </Link>
 
-              <button
-                type="submit"
-                className="btn btn-primary"
-              >
-                {id ? "Update" : "Save"}
+              <button type="submit" className="btn btn-primary">
+                Update
               </button>
             </div>
+
           </form>
         </div>
       </div>
@@ -199,4 +175,4 @@ function DoctorForm() {
   );
 }
 
-export default DoctorForm;
+export default PatientForm;

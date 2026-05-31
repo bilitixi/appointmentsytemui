@@ -18,6 +18,8 @@ import DoctorForm from "./Admin/DoctorForm";
 import ManageDoctorSlots from "./Admin/ManageDoctorSlots";
 import AppointmentSlotForm from "./Admin/AppointmentSlotForm";
 import ManagePatient from "./Admin/ManagePatient";
+import PatientForm from "./Admin/PatientForm";
+import ManagePatientAppointment from "./Admin/ManagePatientAppointment";
 
 
 function App() {
@@ -85,6 +87,19 @@ function App() {
               <ProtectedRoute role="admin">
               <ManagePatient/>
               </ProtectedRoute>}/>
+           <Route path="/managepatients/edit/:id" element={
+              <ProtectedRoute role="admin">
+              <PatientForm/>
+              </ProtectedRoute>}/>
+           <Route path="/managepatients/add" element={
+              <ProtectedRoute role="admin">
+              <PatientForm/>
+              </ProtectedRoute>}/>
+          <Route path="/managepatients/manageappointments/:id" element={
+              <ProtectedRoute role="admin">
+              <ManagePatientAppointment/>
+              </ProtectedRoute>}/>
+
 
 
 
