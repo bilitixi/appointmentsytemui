@@ -41,7 +41,7 @@ function ManageDoctors() {
           },
         }
       );
-
+      alert("Doctor deleted successfully");
       setDoctors(doctors.filter((doctor) => doctor.id !== doctorId));
     } catch (error) {
       console.error(error);

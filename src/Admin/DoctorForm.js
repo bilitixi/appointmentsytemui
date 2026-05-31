@@ -40,6 +40,7 @@ function DoctorForm() {
           doctor,
           config
         );
+        alert("Doctor updated successfully");
       } else {
         // Create new doctor
         await axios.post(
@@ -47,7 +48,9 @@ function DoctorForm() {
           doctor,
           config
         );
+         alert("Doctor created successfully");
       }
+
 
       navigate("/managedoctors");
     } catch (error) {
@@ -71,6 +74,7 @@ function DoctorForm() {
       setDoctor(response.data);
     } catch (error) {
       console.error(error);
+
     }
   };
 

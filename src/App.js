@@ -16,6 +16,9 @@ import ViewAppointments from "./Patient/ViewAppointments";
 import ManageDoctors from "./Admin/ManageDoctor";
 import DoctorForm from "./Admin/DoctorForm";
 import ManageDoctorSlots from "./Admin/ManageDoctorSlots";
+import AppointmentSlotForm from "./Admin/AppointmentSlotForm";
+import ManagePatient from "./Admin/ManagePatient";
+
 
 function App() {
   return (
@@ -30,46 +33,59 @@ function App() {
           <Route path="/error" element={<Error/>} />
 
           <Route path="/patientDashboard" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="patient">
               <PatientDashboard/>
               </ProtectedRoute>}/>
 
           <Route path="/viewdoctors" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="patient">
               <ViewDoctors/>
               </ProtectedRoute>}/>
            <Route path="/bookAppointment" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="patient">
               <BookAppointment/>
               </ProtectedRoute>} />
 
 
           <Route path="/adminDashboard" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="admin">
               <AdminDashboard/>
               </ProtectedRoute>}/>
 
           <Route path="/viewAppointments" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="patient">
               <ViewAppointments/>
               </ProtectedRoute>}/>
 
           <Route path="/managedoctors" element={
-              <ProtectedRoute>
+              <ProtectedRoute role="admin">
               <ManageDoctors/>
               </ProtectedRoute>}/>
           <Route path="/managedoctors/edit/:id" element={
-          <ProtectedRoute>
-          <DoctorForm/>
-          </ProtectedRoute>}/>
+              <ProtectedRoute role="admin">
+              <DoctorForm/>
+              </ProtectedRoute>}/>
           <Route path="/managedoctors/add" element={
-          <ProtectedRoute>
-          <DoctorForm/>
-          </ProtectedRoute>}/>
+              <ProtectedRoute role="admin">
+              <DoctorForm/>
+              </ProtectedRoute>}/>
           <Route path="/managedoctors/manageDoctorSlots/:id" element={
-          <ProtectedRoute>
-          <ManageDoctorSlots/>
-          </ProtectedRoute>}/>
+              <ProtectedRoute role="admin">
+              <ManageDoctorSlots/>
+              </ProtectedRoute>}/>
+          <Route path="/managedoctors/manageDoctorSlots/add/:doctorid" element={
+              <ProtectedRoute role="admin">
+              <AppointmentSlotForm/>
+              </ProtectedRoute>}/>
+          <Route path="/managedoctors/manageDoctorSlots/edit/:slotid" element={
+              <ProtectedRoute role="admin">
+               <AppointmentSlotForm/>
+              </ProtectedRoute>}/>
+          <Route path="/managepatients" element={
+              <ProtectedRoute role="admin">
+              <ManagePatient/>
+              </ProtectedRoute>}/>
+
 
 
 

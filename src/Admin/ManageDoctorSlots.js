@@ -25,7 +25,7 @@ function ManageDoctorSlots() {
         }
       );
 
-      // ✅ FIX: API returns array
+      //  API returns array
       setDoctorData(response.data?.[0] || null);
     } catch (error) {
       console.error(error);
@@ -72,7 +72,7 @@ function ManageDoctorSlots() {
           </h4>
 
           <Link
-            to={`/doctors/${doctorData.doctor.id}/slots/add`}
+            to={`/managedoctors/manageDoctorSlots/add/${id}`}
             className="btn btn-primary btn-sm"
           >
             + Add Slot
@@ -115,7 +115,7 @@ function ManageDoctorSlots() {
 
                       <div>
                         <Link
-                          to={`/slots/edit/${slot.id}`}
+                          to={`/managedoctors/manageDoctorSlots/edit/${slot.id}`}
                           className="btn btn-info btn-sm me-2"
                         >
                           Update

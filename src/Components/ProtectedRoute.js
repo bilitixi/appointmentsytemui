@@ -2,37 +2,47 @@ import { Navigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function ProtectedRoute({ children }) {
-
+function ProtectedRoute({ role, children }) {
     const [loading, setLoading] = useState(true);
     const [isValid, setIsValid] = useState(false);
+    const [userRole, setUserRole] = useState(null);
 
     const token = localStorage.getItem("token");
     const location = useLocation();
 
     useEffect(() => {
-
-        if (!token) {
-            setIsValid(false);
-            setLoading(false);
-            return;
-        }
-
-        axios.get("http://127.0.0.1:8000/check_auth/", {
-            headers: {
-                Authorization: `Token ${token}`
+        const checkAuth = async () => {
+            if (!token) {
+                setLoading(false);
+                return;
             }
-        })
-        .then(() => {
-            setIsValid(true);
-        })
-        .catch(() => {
-            setIsValid(false);
-        })
-        .finally(() => {
-            setLoading(false);
-        });
 
+            try {
+                const response = await axios.get(
+                    "http://127.0.0.1:8000/me/",
+                    {
+                        headers: {
+                            Authorization: `Token ${token}`,
+                        },
+                    }
+                );
+
+                setIsValid(true);
+
+                const role = response.data.is_staff
+                    ? "admin"
+                    : "patient";
+
+                setUserRole(role);
+            } catch (error) {
+                setIsValid(false);
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkAuth();
     }, [token]);
 
     if (loading) {
@@ -40,7 +50,18 @@ function ProtectedRoute({ children }) {
     }
 
     if (!isValid) {
-        return <Navigate to="/login" state={{ from: location }} replace />;
+        return (
+            <Navigate
+                to="/login"
+                state={{ from: location }}
+                replace
+            />
+        );
+    }
+
+    // Role check
+    if (role && userRole !== role) {
+        return <Navigate to="/error" />;
     }
 
     return children;
