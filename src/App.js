@@ -13,6 +13,9 @@ import Error from "./Components/Error";
 import ViewDoctors from "./Patient/ViewDoctors";
 import BookAppointment from "./Patient/BookAppointment";
 import ViewAppointments from "./Patient/ViewAppointments";
+import ManageDoctors from "./Admin/ManageDoctor";
+import DoctorForm from "./Admin/DoctorForm";
+import ManageDoctorSlots from "./Admin/ManageDoctorSlots";
 
 function App() {
   return (
@@ -50,6 +53,23 @@ function App() {
               <ProtectedRoute>
               <ViewAppointments/>
               </ProtectedRoute>}/>
+
+          <Route path="/managedoctors" element={
+              <ProtectedRoute>
+              <ManageDoctors/>
+              </ProtectedRoute>}/>
+          <Route path="/managedoctors/edit/:id" element={
+          <ProtectedRoute>
+          <DoctorForm/>
+          </ProtectedRoute>}/>
+          <Route path="/managedoctors/add" element={
+          <ProtectedRoute>
+          <DoctorForm/>
+          </ProtectedRoute>}/>
+          <Route path="/managedoctors/manageDoctorSlots/:id" element={
+          <ProtectedRoute>
+          <ManageDoctorSlots/>
+          </ProtectedRoute>}/>
 
 
 
