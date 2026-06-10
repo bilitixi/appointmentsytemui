@@ -113,7 +113,7 @@ function ManagePatient() {
                       </button>
 
                       <Link
-                        to={`/managepatients/manageappointments/${patient.id}`}
+                        to={`/managepatients/manageappointments/${patient.id}/${patient.firstName}/${patient.lastName}`}
                         className="btn btn-sm btn-info"
                       >
                         Manage Appointments

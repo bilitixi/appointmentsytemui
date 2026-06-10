@@ -4,6 +4,9 @@ import { Link, useParams } from "react-router";
 
 function ManagePatientAppointments() {
   const { id } = useParams();
+  const {firstName} = useParams();
+  const {lastName} = useParams();
+
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +29,7 @@ function ManagePatientAppointments() {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     loadAppointments();
@@ -58,7 +62,7 @@ function ManagePatientAppointments() {
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>My Appointments</h2>
+        <h2>{firstName} {lastName}'s Appointments</h2>
 
         <Link
           to={`/patients/${id}/appointments/add`}
@@ -76,7 +80,9 @@ function ManagePatientAppointments() {
             <thead className="table-dark">
               <tr>
                 <th>Doctor</th>
+                <th>Date</th>
                 <th>Time</th>
+                <th>Last Update</th>
                 <th>Status</th>
                 <th>Action</th>
               </tr>
@@ -84,22 +90,32 @@ function ManagePatientAppointments() {
 
             <tbody>
               {appointments.length > 0 ? (
-                appointments.map((appointment) => (
-                  <tr key={appointment.id}>
+                      [...appointments]
+                        .sort(
+                          (a, b) =>
+                            new Date(a.slot_info?.date) - new Date(b.slot_info?.date)
+                        )
+                        .map((appointment) => (
+                          <tr key={appointment.id}>
 
-                    {/* Doctor */}
-                    <td>
-                      {appointment.doctor_name}
-                    </td>
+                            {/* Doctor */}
+                            <td>{appointment.doctor_name}</td>
 
-                    {/* Time */}
-                    <td>
-                      {appointment.slot_info?.start_time?.slice(0, 5)} -{" "}
-                      {appointment.slot_info?.end_time?.slice(0, 5)}
-                    </td>
+                            {/* Date */}
+                            <td>{appointment.slot_info?.date}</td>
 
-                    {/* Status */}
-                    <td>{appointment.status}</td>
+                            {/* Time */}
+                            <td>
+                              {appointment.slot_info?.start_time?.slice(0, 5)} -{" "}
+                              {appointment.slot_info?.end_time?.slice(0, 5)}
+                            </td>
+
+                            {/* Last Update */}
+                            <td>{appointment.updated_at.slice(0, 10)}</td>
+
+                            {/* Status */}
+                            <td>{appointment.status}</td>
+
 
                     {/* Actions */}
                     <td>

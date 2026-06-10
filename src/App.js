@@ -95,7 +95,7 @@ function App() {
               <ProtectedRoute role="admin">
               <PatientForm/>
               </ProtectedRoute>}/>
-          <Route path="/managepatients/manageappointments/:id" element={
+          <Route path="/managepatients/manageappointments/:id/:firstName/:lastName" element={
               <ProtectedRoute role="admin">
               <ManagePatientAppointment/>
               </ProtectedRoute>}/>
