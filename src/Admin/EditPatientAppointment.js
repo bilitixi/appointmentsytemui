@@ -15,6 +15,22 @@ function EditPatientAppointment() {
     end_time: "",
     speciality: "",
   });
+   function parseErrors(error) {
+
+    const data = error.response?.data;
+
+    if (!data) return ["Something went wrong"];
+
+    // Case 1: array response
+    if (Array.isArray(data)) {
+        return data;
+    }
+
+    // Case 2: object response
+    return Object.entries(data).flatMap(([field, messages]) => {
+        return messages;
+    });
+}
 
   const [lastUpdate, setLastUpdate] = useState("");
 
@@ -68,22 +84,26 @@ function EditPatientAppointment() {
     e.preventDefault();
 
     axios
-      .put(
-        `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
-        formData,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.getItem("token")}`,
-          },
-        }
-      )
+        .put(
+            `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
+            formData,
+            {
+              headers: {
+                Authorization: `Token ${localStorage.getItem("token")}`,
+              },
+            }
+        )
 
-      .then(() =>
-          alert("Appointment updated successfully"),
-          navigate(-1))
-      .catch((err) => console.log(err));
-
-  };
+        .then(() => {
+          alert("Appointment updated successfully");
+          navigate(-1);
+        })
+        .catch((err) => {
+          const error = parseErrors(err);
+          alert(error);
+          console.log(err);
+        })
+  }
 
   return (
     <div className="container mt-4">
