@@ -20,6 +20,7 @@ import AppointmentSlotForm from "./Admin/AppointmentSlotForm";
 import ManagePatient from "./Admin/ManagePatient";
 import PatientForm from "./Admin/PatientForm";
 import ManagePatientAppointment from "./Admin/ManagePatientAppointment";
+import EditPatientAppointment from "./Admin/EditPatientAppointment";
 
 
 function App() {
@@ -98,6 +99,10 @@ function App() {
           <Route path="/managepatients/manageappointments/:id/:firstName/:lastName" element={
               <ProtectedRoute role="admin">
               <ManagePatientAppointment/>
+              </ProtectedRoute>}/>
+          <Route path="/managepatients/manageappointments/edit/:appointmentID/:appointmentSlotID" element={
+              <ProtectedRoute role="admin">
+              <EditPatientAppointment/>
               </ProtectedRoute>}/>
 
 

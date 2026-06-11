@@ -120,7 +120,7 @@ function ManagePatientAppointments() {
                     {/* Actions */}
                     <td>
                       <Link
-                        to={`/appointments/edit/${appointment.id}`}
+                        to={`/managepatients/manageappointments/edit/${appointment.id}/${appointment.slot_info?.appointmentslotID}`}
                         className="btn btn-sm btn-primary me-2"
                       >
                         Edit

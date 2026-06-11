@@ -118,7 +118,7 @@ function ViewAppointments() {
 
                                             {/* Doctor */}
                                             <td>
-                                                {appointment.status === "Booked"
+                                                {appointment.status === "confirmed"
                                                     ? appointment.doctor_name
                                                     : "Allocating Doctor, Please wait..."
                                                 }
