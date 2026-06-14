@@ -21,6 +21,7 @@ import ManagePatient from "./Admin/ManagePatient";
 import PatientForm from "./Admin/PatientForm";
 import ManagePatientAppointment from "./Admin/ManagePatientAppointment";
 import EditPatientAppointment from "./Admin/EditPatientAppointment";
+import UploadPatients from "./Admin/UploadPatient";
 
 
 function App() {
@@ -107,6 +108,10 @@ function App() {
            <Route path="/managepatients/manageappointments/add/:patientID" element={
               <ProtectedRoute role="admin">
               <EditPatientAppointment/>
+              </ProtectedRoute>}/>
+          <Route path="/managepatients/upload" element={
+              <ProtectedRoute role="admin">
+              <UploadPatients/>
               </ProtectedRoute>}/>
 
 

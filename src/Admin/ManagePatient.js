@@ -63,7 +63,7 @@ function ManagePatient() {
         <h2>Patient Management</h2>
 
         <Link
-          to="/managepatients/add/"
+          to="/managepatients/upload/"
           className="btn btn-primary"
         >
           + Create Patient
