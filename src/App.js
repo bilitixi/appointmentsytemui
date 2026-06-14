@@ -104,6 +104,10 @@ function App() {
               <ProtectedRoute role="admin">
               <EditPatientAppointment/>
               </ProtectedRoute>}/>
+           <Route path="/managepatients/manageappointments/add/:patientID" element={
+              <ProtectedRoute role="admin">
+              <EditPatientAppointment/>
+              </ProtectedRoute>}/>
 
 
 

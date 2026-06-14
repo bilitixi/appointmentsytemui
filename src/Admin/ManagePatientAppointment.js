@@ -65,7 +65,7 @@ function ManagePatientAppointments() {
         <h2>{firstName} {lastName}'s Appointments</h2>
 
         <Link
-          to={`/patients/${id}/appointments/add`}
+          to={`/managepatients/manageappointments/add/${id}`}
           className="btn btn-secondary btn-sm"
         >
           Add Appointment

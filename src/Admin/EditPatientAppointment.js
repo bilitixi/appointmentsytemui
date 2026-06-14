@@ -4,7 +4,11 @@ import { useParams, useNavigate } from "react-router";
 
 function EditPatientAppointment() {
   const { appointmentSlotID } = useParams();
+  const { patientID } = useParams();
   const navigate = useNavigate();
+
+  // mode state
+  const isEditMode = !!appointmentSlotID;
 
   const [doctors, setDoctors] = useState([]);
 
@@ -15,26 +19,20 @@ function EditPatientAppointment() {
     end_time: "",
     speciality: "",
   });
-   function parseErrors(error) {
 
+  const [lastUpdate, setLastUpdate] = useState("");
+
+  function parseErrors(error) {
     const data = error.response?.data;
 
     if (!data) return ["Something went wrong"];
 
-    // Case 1: array response
-    if (Array.isArray(data)) {
-        return data;
-    }
+    if (Array.isArray(data)) return data;
 
-    // Case 2: object response
-    return Object.entries(data).flatMap(([field, messages]) => {
-        return messages;
-    });
-}
+    return Object.entries(data).flatMap(([field, messages]) => messages);
+  }
 
-  const [lastUpdate, setLastUpdate] = useState("");
-
-  //Load doctors list
+  // Load doctors list
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/doctors/", {
@@ -46,14 +44,19 @@ function EditPatientAppointment() {
       .catch((err) => console.log(err));
   }, []);
 
-  //  Load appointment data (edit mode)
+  // ONLY load appointment if edit mode
   useEffect(() => {
+    if (!isEditMode) return;
+
     axios
-      .get(`http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}`, {
-        headers: {
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
+      .get(
+        `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
+        {
+          headers: {
+            Authorization: `Token ${localStorage.getItem("token")}`,
+          },
+        }
+      )
       .then((res) => {
         const data = res.data;
 
@@ -68,58 +71,73 @@ function EditPatientAppointment() {
         setLastUpdate(data.updated_at);
       })
       .catch((err) => console.log(err));
-  }, [appointmentSlotID]);
+  }, [appointmentSlotID, isEditMode]);
 
-  //  Handle input change
+  // Handle input change
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-
     });
   };
 
-  //  Submit update
+  // POST (add) OR PUT (edit)
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios
-        .put(
-            `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
-            formData,
-            {
-              headers: {
-                Authorization: `Token ${localStorage.getItem("token")}`,
-              },
-            }
+    const request = isEditMode
+      ? axios.put(
+          `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
+          formData,
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
         )
+      : axios.post(
+          `http://127.0.0.1:8000/book_appointment_for_patient/${patientID}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
-        .then(() => {
-          alert("Appointment updated successfully");
-          navigate(-1);
-        })
-        .catch((err) => {
-          const error = parseErrors(err);
-          alert(error);
-          console.log(err);
-        })
-  }
+    request
+      .then(() => {
+        alert(
+          isEditMode
+            ? "Appointment updated successfully"
+            : "Appointment created successfully"
+        );
+        navigate(-1);
+      })
+      .catch((err) => {
+        const error = parseErrors(err);
+        alert(error);
+        console.log(err);
+      });
+  };
 
   return (
     <div className="container mt-4">
       <div className="card shadow p-4">
 
-        {/* Title */}
-        <h3 className="mb-2">Edit Patient Appointment</h3>
+        {/*  Dynamic Title */}
+        <h3 className="mb-2">
+          {isEditMode ? "Edit Patient Appointment" : "Add Patient Appointment"}
+        </h3>
 
-        {/* Last Update */}
-        <h6 className="text-muted mb-4">
-          Last Update: {lastUpdate?.slice(0, 10)}
-        </h6>
+        {/*  Only show last update in edit mode */}
+        {isEditMode && (
+          <h6 className="text-muted mb-4">
+            Last Update: {lastUpdate?.slice(0, 10)}
+          </h6>
+        )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
-
           {/* Doctor Dropdown */}
           <div className="mb-3">
             <label className="form-label">Doctor</label>
@@ -191,9 +209,8 @@ function EditPatientAppointment() {
 
           {/* Submit */}
           <button type="submit" className="btn btn-primary w-100">
-            Update Slot
+            {isEditMode ? "Update Slot" : "Create Slot"}
           </button>
-
         </form>
       </div>
     </div>
