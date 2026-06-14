@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router";
+import axios from "axios";
 
 function Navigation() {
 
@@ -8,13 +9,23 @@ function Navigation() {
     const isAuthenticated =
         localStorage.getItem("token");
 
-    function handleLogout() {
+    async function handleLogout() {
+        const token = localStorage.getItem("token");
+        try {
+            await axios.get(
+                "http://127.0.0.1:8000/logout/",
+                {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                }
+            );
+        } catch (error) {
+            console.error(error);
+        }
 
-        // remove tokens
+
         localStorage.removeItem("token");
-
-
-        // move back to login page
         navigate("/login");
     }
 
