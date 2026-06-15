@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import api from "../api";
+import {useNavigate} from "react-router";
 
 function UploadPatients() {
+    const navigate = useNavigate()
     const [file, setFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -34,6 +36,7 @@ function UploadPatients() {
             );
 
             alert("Patients created successfully.");
+            navigate("/managepatients");
         } catch (error) {
             console.error(error);
             alert("Upload failed.");
