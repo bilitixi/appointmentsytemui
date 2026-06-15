@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router";
+import api from "../api";
 
 function DoctorForm() {
   const navigate = useNavigate();
@@ -52,16 +52,16 @@ function DoctorForm() {
     try {
       if (id) {
         // Update existing doctor
-        await axios.put(
-          `http://127.0.0.1:8000/doctors/${id}/`,
+        await api.put(
+          `/doctors/${id}/`,
           doctor,
           config
         );
         alert("Doctor updated successfully");
       } else {
         // Create new doctor
-        await axios.post(
-          "http://127.0.0.1:8000/doctors/",
+        await api.post(
+          "/doctors/",
           doctor,
           config
         );
@@ -81,8 +81,8 @@ function DoctorForm() {
 
   const loadDoctor = async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/doctors/${id}/`,
+      const response = await api.get(
+        `/doctors/${id}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,

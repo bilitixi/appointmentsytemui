@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useParams } from "react-router";
+import api from "../api";
 
 function ManagePatientAppointments() {
   const { id } = useParams();
@@ -13,8 +13,8 @@ function ManagePatientAppointments() {
 
   const loadAppointments = async () => {
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/appointments/?patient_id=${id}`,
+      const response = await api.get(
+        `/appointments/?patient_id=${id}`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -40,8 +40,8 @@ function ManagePatientAppointments() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/appointments/${appointmentId}/`,
+      await api.delete(
+        `/appointments/${appointmentId}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,

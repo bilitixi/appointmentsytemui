@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router";
+import api from "../api";
 
 function ManageDoctors() {
   const [doctors, setDoctors] = useState([]);
@@ -8,15 +8,13 @@ function ManageDoctors() {
 
   useEffect(() => {
     const config = {
-      method: "get",
-      url: "http://127.0.0.1:8000/doctors/",
       headers: {
         Authorization: `Token ${localStorage.getItem("token")}`,
       },
     };
 
-    axios
-      .request(config)
+    api
+      .get("/doctors/", config)
       .then((response) => {
         setDoctors(response.data);
         setLoading(false);
@@ -33,8 +31,8 @@ function ManageDoctors() {
     }
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/doctors/${doctorId}/`,
+      await api.delete(
+        `/doctors/${doctorId}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,

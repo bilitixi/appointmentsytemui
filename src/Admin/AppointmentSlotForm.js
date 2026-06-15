@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router";
+import api from "../api";
 
 function AppointmentSlotForm() {
   const navigate = useNavigate();
@@ -54,8 +54,8 @@ function AppointmentSlotForm() {
     try {
       if (slotid) {
         // Update slot
-        await axios.put(
-          `http://127.0.0.1:8000/appointment_slots/${slotid}/`,
+        await api.put(
+          `/appointment_slots/${slotid}/`,
           slot,
           config
         );
@@ -63,8 +63,8 @@ function AppointmentSlotForm() {
          navigate(`/managedoctors/manageDoctorSlots/${doctorID}`);
       } else {
         // Create slot
-        await axios.post(
-          "http://127.0.0.1:8000/appointment_slots/",
+        await api.post(
+          "/appointment_slots/",
           slot,
           config
         );
@@ -89,8 +89,8 @@ function AppointmentSlotForm() {
 
     const loadSlot = async () => {
       try {
-        const response = await axios.get(
-          `http://127.0.0.1:8000/appointment_slots/${slotid}/`,
+        const response = await api.get(
+          `/appointment_slots/${slotid}/`,
           {
             headers: {
               Authorization: `Token ${localStorage.getItem("token")}`,

@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import { useState } from 'react';
 import {Link, useNavigate} from "react-router";
+import api from "../api";
 
 function Login(props) {
     const [username, setUsername] = useState('');
@@ -17,16 +17,12 @@ function Login(props) {
         });
 
         let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://127.0.0.1:8000/auth/',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            data: data
+            }
         };
 
-        axios.request(config)
+        api.post('/auth/', data, config)
             .then((response) => {
                 console.log(JSON.stringify(response.data));
                 localStorage.setItem("token", response.data.token);
@@ -41,15 +37,12 @@ function Login(props) {
     }
     function checkLoginStatus(){
         let config = {
-          method: 'get',
-          maxBodyLength: Infinity,
-          url: 'http://127.0.0.1:8000/me/',
           headers: {
             'Authorization': `Token ${localStorage.getItem("token")}`
           }
         };
 
-        axios.request(config)
+        api.get('/me/', config)
         .then((response) => {
           console.log(JSON.stringify(response.data.is_staff));
           if(response.data.is_staff){

@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { useState } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router";
+import api from "../api";
 
 function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -48,8 +48,8 @@ function Register() {
 
         try {
 
-            await axios.post(
-                "http://127.0.0.1:8000/register/",
+            await api.post(
+                "/register/",
                 formData
             );
 

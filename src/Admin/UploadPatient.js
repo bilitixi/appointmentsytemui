@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function UploadPatients() {
     const [file, setFile] = useState(null);
@@ -23,8 +23,8 @@ function UploadPatients() {
         try {
             setLoading(true);
 
-            await axios.post(
-                "http://127.0.0.1:8000/createpatients/",
+            await api.post(
+                "/createpatients/",
                 formData,
                 {
                     headers: {

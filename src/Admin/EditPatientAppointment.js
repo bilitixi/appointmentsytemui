@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useParams, useNavigate } from "react-router";
+import api from "../api";
 
 function EditPatientAppointment() {
   const { appointmentSlotID } = useParams();
@@ -34,8 +34,8 @@ function EditPatientAppointment() {
 
   // Load doctors list
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/doctors/", {
+    api
+      .get("/doctors/", {
         headers: {
           Authorization: `Token ${localStorage.getItem("token")}`,
         },
@@ -48,9 +48,9 @@ function EditPatientAppointment() {
   useEffect(() => {
     if (!isEditMode) return;
 
-    axios
+    api
       .get(
-        `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
+        `/appointment_slots/${appointmentSlotID}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -86,8 +86,8 @@ function EditPatientAppointment() {
     e.preventDefault();
 
     const request = isEditMode
-      ? axios.put(
-          `http://127.0.0.1:8000/appointment_slots/${appointmentSlotID}/`,
+      ? api.put(
+          `/appointment_slots/${appointmentSlotID}/`,
           formData,
           {
             headers: {
@@ -95,8 +95,8 @@ function EditPatientAppointment() {
             },
           }
         )
-      : axios.post(
-          `http://127.0.0.1:8000/book_appointment_for_patient/${patientID}`,
+      : api.post(
+          `/book_appointment_for_patient/${patientID}`,
           formData,
           {
             headers: {

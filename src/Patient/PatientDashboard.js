@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import axios from "axios";
 import {Link, useNavigate} from "react-router";
+import api from "../api";
 
 function PatientDashboard(props) {
     const [patient, setPatient] = useState('')
@@ -11,7 +11,7 @@ function PatientDashboard(props) {
 
         const token = localStorage.getItem("token");
 
-        axios.get("http://127.0.0.1:8000/patients/", {
+        api.get("/patients/", {
             headers: {
                 Authorization: `Token ${token}`
             }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from "react";
-import axios from "axios";
+import api from "../api";
 
 function ViewDoctors() {
 
@@ -8,8 +8,8 @@ function ViewDoctors() {
 
     async function bookAppointment(slotID) {
     try {
-        const response = await axios.patch(
-            `http://127.0.0.1:8000/appointment_slots/${slotID}/`, {},{
+        const response = await api.patch(
+            `/appointment_slots/${slotID}/`, {},{
                 headers: {
                     Authorization: `Token ${localStorage.getItem("token")}`,
                     "Content-Type": "application/json"
@@ -35,8 +35,8 @@ function ViewDoctors() {
 
         try {
 
-            const response = await axios.get(
-                "http://127.0.0.1:8000/doctors_with_slots/",
+            const response = await api.get(
+                "/doctors_with_slots/",
                 {
                     headers: {
                         Authorization: `Token ${localStorage.getItem("token")}`

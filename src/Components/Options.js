@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import axios from "axios";
+import api from "../api";
 
 function Options() {
 
@@ -10,7 +10,7 @@ function Options() {
 
         try {
 
-            const response = await axios.get("http://127.0.0.1:8000/me/", {
+            const response = await api.get("/me/", {
                 headers: {
                     Authorization: `Token ${localStorage.getItem("token")}`
                 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link } from "react-router";
+import api from "../api";
 
 function ManagePatient() {
   const [patients, setPatients] = useState([]);
@@ -8,8 +8,8 @@ function ManagePatient() {
 
   const loadPatients = async () => {
     try {
-      const response = await axios.get(
-        "http://127.0.0.1:8000/patients/",
+      const response = await api.get(
+        "/patients/",
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -33,8 +33,8 @@ function ManagePatient() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/patients/${id}/`,
+      await api.delete(
+        `/patients/${id}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,

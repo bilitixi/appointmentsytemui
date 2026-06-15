@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useParams } from "react-router";
+import api from "../api";
 
 function ManageDoctorSlots() {
   const { id } = useParams();
@@ -16,8 +16,8 @@ function ManageDoctorSlots() {
     setLoading(true);
 
     try {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/doctor_slots/${id}`,
+      const response = await api.get(
+        `/doctor_slots/${id}`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,
@@ -39,8 +39,8 @@ function ManageDoctorSlots() {
     if (!window.confirm("Delete this slot?")) return;
 
     try {
-      await axios.delete(
-        `http://127.0.0.1:8000/appointment_slots/${slotId}/`,
+      await api.delete(
+        `/appointment_slots/${slotId}/`,
         {
           headers: {
             Authorization: `Token ${localStorage.getItem("token")}`,

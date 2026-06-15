@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import {useNavigate} from "react-router";
+import api from "../api";
 
 function BookAppointment() {
     const navigate = useNavigate()
@@ -47,8 +47,8 @@ function BookAppointment() {
 
         const token = localStorage.getItem("token");
 
-        axios.post(
-            "http://127.0.0.1:8000/appointment_slots/",
+        api.post(
+            "/appointment_slots/",
             formData,
             {
                 headers: {

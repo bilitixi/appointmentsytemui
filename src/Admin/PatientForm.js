@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router";
+import api from "../api";
 
 function PatientForm() {
   const navigate = useNavigate();
@@ -43,8 +43,8 @@ function PatientForm() {
     if (id) {
         const loadPatient = async () => {
             try {
-              const response = await axios.get(
-                `http://127.0.0.1:8000/patients/${id}/`,
+              const response = await api.get(
+                `/patients/${id}/`,
                 {
                   headers: {
                     Authorization: `Token ${localStorage.getItem("token")}`,
@@ -73,8 +73,8 @@ function PatientForm() {
 
 
           try {
-              await axios.put(
-                  `http://127.0.0.1:8000/patients/${id}/`,
+              await api.put(
+                  `/patients/${id}/`,
                   patient,
                   config
               );

@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function ProtectedRoute({ role, children }) {
     const [loading, setLoading] = useState(true);
@@ -18,8 +18,8 @@ function ProtectedRoute({ role, children }) {
             }
 
             try {
-                const response = await axios.get(
-                    "http://127.0.0.1:8000/me/",
+                const response = await api.get(
+                    "/me/",
                     {
                         headers: {
                             Authorization: `Token ${token}`,
