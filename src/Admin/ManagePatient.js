@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { Link } from "react-router";
 import api from "../api";
 
@@ -6,7 +6,7 @@ function ManagePatient() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const loadPatients = async () => {
+  const loadPatients = useCallback(async () => {
     try {
       const response = await api.get(
         "/patients/",
@@ -23,7 +23,7 @@ function ManagePatient() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const deletePatient = async (id) => {
     const confirmDelete = window.confirm(
@@ -50,7 +50,7 @@ function ManagePatient() {
 
   useEffect(() => {
     loadPatients();
-  }, []);
+  }, [loadPatients]);
 
   if (loading) {
     return <h3>Loading...</h3>;
