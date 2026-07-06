@@ -3,6 +3,7 @@ import './App.css';
 import {BrowserRouter, Route, Routes} from "react-router";
 import Login from './Registration/Login';
 import Register from './Registration/Register';
+import VerifyEmail from './Registration/VerifyEmail';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "./Components/Navigation";
 import Options from "./Components/Options";
@@ -120,6 +121,7 @@ function App() {
 
         <Route path="/login" element={<Login/>} />
         <Route path="/register" element={<Register/>} />
+        <Route path="/verify-email/:token" element={<VerifyEmail/>} />
 
 
       </Routes>
