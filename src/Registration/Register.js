@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import api from "../api";
 
 function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
-
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
 
@@ -22,6 +20,9 @@ function Register() {
     });
 
     const [errors, setErrors] = useState([]);
+
+    const [registered, setRegistered] = useState(false);
+    const [resendStatus, setResendStatus] = useState("");
 
     function handleChange(e) {
 
@@ -53,9 +54,7 @@ function Register() {
                 formData
             );
 
-            alert("Registration successful");
-
-            navigate("/login");
+            setRegistered(true);
 
         }
         catch(error) {
@@ -81,6 +80,88 @@ function Register() {
 
             setErrors(errorList);
         }
+    }
+
+    async function handleResend() {
+
+        setResendStatus("");
+
+        try {
+
+            const response = await api.post(
+                "/resend_verification_email/",
+                { username: formData.username }
+            );
+
+            setResendStatus(response.data.message);
+
+        }
+        catch (error) {
+
+            setResendStatus(
+                error.response?.data?.message ||
+                "Something went wrong. Please try again."
+            );
+        }
+    }
+
+    if (registered) {
+
+        return (
+
+            <div className="container">
+
+                <div className="row justify-content-center mt-5">
+
+                    <div className="col-md-6">
+
+                        <div className="card shadow">
+
+                            <div className="card-header text-center bg-dark text-white">
+
+                                <h4>Registration Successful</h4>
+
+                            </div>
+
+                            <div className="card-body">
+
+                                <div className="alert alert-success">
+                                    We've sent a verification link to your
+                                    email. Please check your inbox.
+                                </div>
+
+                                {resendStatus && (
+
+                                    <div className="alert alert-info">
+                                        {resendStatus}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary w-100 mb-3"
+                                    onClick={handleResend}
+                                >
+                                    Resend Email
+                                </button>
+
+                                <Link
+                                    to="/login"
+                                    className="btn btn-primary w-100"
+                                >
+                                    Go to Login
+                                </Link>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        );
     }
 
     return (
