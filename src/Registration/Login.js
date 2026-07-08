@@ -150,6 +150,15 @@ function Login(props) {
 
                             </form>
 
+                            {/* Forgot Password Link */}
+                            <p className="text-center mt-3">
+
+                                <Link to="/forgot-password">
+                                    Forgot password?
+                                </Link>
+
+                            </p>
+
                             <hr />
 
                             {/* Register Link */}
