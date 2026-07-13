@@ -3,9 +3,12 @@ import React from 'react';
 import { useState } from "react";
 import { Link } from "react-router";
 import api from "../api";
+import { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [submitting, setSubmitting] = useState(false);
+    const [resending, setResending] = useState(false);
 
     const [formData, setFormData] = useState({
 
@@ -49,6 +52,8 @@ function Register() {
 
         try {
 
+            setSubmitting(true);
+
             await api.post(
                 "/register/",
                 formData
@@ -80,6 +85,9 @@ function Register() {
 
             setErrors(errorList);
         }
+        finally {
+            setSubmitting(false);
+        }
     }
 
     async function handleResend() {
@@ -87,6 +95,8 @@ function Register() {
         setResendStatus("");
 
         try {
+
+            setResending(true);
 
             const response = await api.post(
                 "/resend_verification_email/",
@@ -102,6 +112,9 @@ function Register() {
                 error.response?.data?.message ||
                 "Something went wrong. Please try again."
             );
+        }
+        finally {
+            setResending(false);
         }
     }
 
@@ -141,7 +154,9 @@ function Register() {
                                     type="button"
                                     className="btn btn-secondary w-100 mb-3"
                                     onClick={handleResend}
+                                    disabled={resending}
                                 >
+                                    {resending && <ButtonSpinner />}
                                     Resend Email
                                 </button>
 
@@ -394,8 +409,10 @@ function Register() {
                                 <button
                                     type="submit"
                                     className="btn btn-success w-100"
+                                    disabled={submitting}
                                 >
 
+                                    {submitting && <ButtonSpinner />}
                                     Register
 
                                 </button>

@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function DoctorForm() {
   const navigate = useNavigate();
   const { id } = useParams(); // will exist when editing
 
+  const [loading, setLoading] = useState(!!id);
+  const [submitting, setSubmitting] = useState(false);
 
   const [doctor, setDoctor] = useState({
     firstName: "",
@@ -50,6 +53,7 @@ function DoctorForm() {
     };
 
     try {
+      setSubmitting(true);
       if (id) {
         // Update existing doctor
         await api.put(
@@ -74,6 +78,8 @@ function DoctorForm() {
       const errors = parseErrors(error);
       alert(errors.join("\n"));
       console.error(error);
+    } finally {
+      setSubmitting(false);
     }
   };
   useEffect(() => {
@@ -94,11 +100,15 @@ function DoctorForm() {
     } catch (error) {
       console.error(error);
 
+    } finally {
+      setLoading(false);
     }
   };
 
   loadDoctor();
 }, [id]);
+
+  if (loading) return <PageLoader />;
 
   return (
     <div className="container py-5">
@@ -188,7 +198,9 @@ function DoctorForm() {
               <button
                 type="submit"
                 className="btn btn-primary"
+                disabled={submitting}
               >
+                {submitting && <ButtonSpinner />}
                 {id ? "Update" : "Save"}
               </button>
             </div>

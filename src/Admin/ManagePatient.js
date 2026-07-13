@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useState} from "react";
 import { Link } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ManagePatient() {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   const loadPatients = useCallback(async () => {
     try {
@@ -33,6 +35,7 @@ function ManagePatient() {
     if (!confirmDelete) return;
 
     try {
+      setDeletingId(id);
       await api.delete(
         `/patients/${id}/`,
         {
@@ -42,9 +45,11 @@ function ManagePatient() {
         }
       );
 
-      loadPatients();
+      await loadPatients();
     } catch (error) {
       console.error(error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -53,7 +58,7 @@ function ManagePatient() {
   }, [loadPatients]);
 
   if (loading) {
-    return <h3>Loading...</h3>;
+    return <PageLoader />;
   }
 
   return (
@@ -105,10 +110,12 @@ function ManagePatient() {
 
                       <button
                         className="btn btn-sm btn-danger me-2"
+                        disabled={deletingId === patient.id}
                         onClick={() =>
                           deletePatient(patient.id)
                         }
                       >
+                        {deletingId === patient.id && <ButtonSpinner />}
                         Delete
                       </button>
 

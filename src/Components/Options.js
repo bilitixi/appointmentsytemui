@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../api";
+import { ButtonSpinner } from "./LoadingSpinner";
 
 function Options() {
 
     const navigate = useNavigate();
+    const [loadingRole, setLoadingRole] = useState(null);
 
     async function handleSelection(selectedRole) {
 
         try {
+            setLoadingRole(selectedRole);
 
             const response = await api.get("/me/", {
                 headers: {
@@ -35,6 +38,8 @@ function Options() {
         } catch (error) {
             console.log(error);
             navigate("/login");
+        } finally {
+            setLoadingRole(null);
         }
     }
 
@@ -55,15 +60,19 @@ function Options() {
 
                     <button
                         className="btn btn-primary btn-lg"
+                        disabled={loadingRole !== null}
                         onClick={() => handleSelection("patient")}
                     >
+                        {loadingRole === "patient" && <ButtonSpinner />}
                         Patient Dashboard
                     </button>
 
                     <button
                         className="btn btn-dark btn-lg"
+                        disabled={loadingRole !== null}
                         onClick={() => handleSelection("admin")}
                     >
+                        {loadingRole === "admin" && <ButtonSpinner />}
                         Admin Dashboard
                     </button>
 

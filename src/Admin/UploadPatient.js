@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../api";
 import {useNavigate} from "react-router";
+import { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function UploadPatients() {
     const navigate = useNavigate()
@@ -68,6 +69,7 @@ function UploadPatients() {
                     className="btn btn-primary"
                     disabled={loading}
                 >
+                    {loading && <ButtonSpinner />}
                     {loading
                         ? "Creating Patients..."
                         : "Upload and Create Patients"}

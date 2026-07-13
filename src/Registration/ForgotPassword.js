@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { Link } from "react-router";
 import api from "../api";
+import { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ForgotPassword() {
 
@@ -9,6 +10,7 @@ function ForgotPassword() {
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [submitted, setSubmitted] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     async function handleSubmit(e) {
 
@@ -17,6 +19,8 @@ function ForgotPassword() {
         setError("");
 
         try {
+
+            setSubmitting(true);
 
             const response = await api.post(
                 "/forgot_password/",
@@ -33,6 +37,9 @@ function ForgotPassword() {
                 error.response?.data?.message ||
                 "Something went wrong. Please try again."
             );
+        }
+        finally {
+            setSubmitting(false);
         }
     }
 
@@ -105,7 +112,9 @@ function ForgotPassword() {
                                     <button
                                         type="submit"
                                         className="btn btn-success w-100"
+                                        disabled={submitting}
                                     >
+                                        {submitting && <ButtonSpinner />}
                                         Send Reset Link
                                     </button>
 

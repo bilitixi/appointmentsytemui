@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ManagePatientAppointments() {
   const { id } = useParams();
@@ -10,6 +11,7 @@ function ManagePatientAppointments() {
 
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   const loadAppointments = async () => {
     try {
@@ -40,6 +42,7 @@ function ManagePatientAppointments() {
     if (!confirmDelete) return;
 
     try {
+      setDeletingId(appointmentId);
       await api.delete(
         `/appointments/${appointmentId}/`,
         {
@@ -49,13 +52,15 @@ function ManagePatientAppointments() {
         }
       );
 
-      loadAppointments();
+      await loadAppointments();
     } catch (error) {
       console.error(error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading) return <PageLoader />;
 
   return (
     <div className="container py-5">
@@ -128,10 +133,12 @@ function ManagePatientAppointments() {
 
                       <button
                         className="btn btn-sm btn-danger"
+                        disabled={deletingId === appointment.id}
                         onClick={() =>
                           deleteAppointment(appointment.id)
                         }
                       >
+                        {deletingId === appointment.id && <ButtonSpinner />}
                         Cancel
                       </button>
                     </td>

@@ -1,6 +1,7 @@
 import { Navigate, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import api from "../api";
+import PageLoader from "./LoadingSpinner";
 
 function ProtectedRoute({ role, children }) {
     const [loading, setLoading] = useState(true);
@@ -46,7 +47,7 @@ function ProtectedRoute({ role, children }) {
     }, [token]);
 
     if (loading) {
-        return <div>Checking authentication...</div>;
+        return <PageLoader text="Checking authentication..." />;
     }
 
     if (!isValid) {
