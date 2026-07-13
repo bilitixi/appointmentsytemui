@@ -1,13 +1,16 @@
 import React, { useEffect, useState} from "react";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ViewDoctors() {
 
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [bookingSlotId, setBookingSlotId] = useState(null);
 
     async function bookAppointment(slotID) {
     try {
+        setBookingSlotId(slotID);
         const response = await api.patch(
             `/appointment_slots/${slotID}/`, {},{
                 headers: {
@@ -28,6 +31,8 @@ function ViewDoctors() {
     }
     catch (error) {
         console.error("Error booking slot:", error);
+    } finally {
+        setBookingSlotId(null);
     }
 }
 
@@ -62,7 +67,7 @@ function ViewDoctors() {
     }, []);
 
     if (loading) {
-        return <h3 className="text-center mt-5">Loading...</h3>;
+        return <PageLoader />;
     }
 
     return (
@@ -114,7 +119,9 @@ function ViewDoctors() {
                                                                 onClick={() => bookAppointment(slot.id)}
                                                                 key={slot.id}
                                                                 className="btn btn-outline-primary btn-sm"
+                                                                disabled={bookingSlotId === slot.id}
                                                             >
+                                                                {bookingSlotId === slot.id && <ButtonSpinner />}
                                                                 {slot.start_time} -{" "}
                                                                 {slot.end_time}
                                                             </button>

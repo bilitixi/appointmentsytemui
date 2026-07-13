@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ManageDoctors() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     const config = {
@@ -31,6 +33,7 @@ function ManageDoctors() {
     }
 
     try {
+      setDeletingId(doctorId);
       await api.delete(
         `/doctors/${doctorId}/`,
         {
@@ -43,11 +46,13 @@ function ManageDoctors() {
       setDoctors(doctors.filter((doctor) => doctor.id !== doctorId));
     } catch (error) {
       console.error(error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
   if (loading) {
-    return <h3>Loading...</h3>;
+    return <PageLoader />;
   }
 
   return (
@@ -92,8 +97,10 @@ function ManageDoctors() {
 
                       <button
                         className="btn btn-danger btn-sm me-2"
+                        disabled={deletingId === doctor.id}
                         onClick={() => handleDelete(doctor.id)}
                       >
+                        {deletingId === doctor.id && <ButtonSpinner />}
                         Delete
                       </button>
 

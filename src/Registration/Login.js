@@ -2,11 +2,13 @@ import React from 'react';
 import { useState } from 'react';
 import {Link, useNavigate} from "react-router";
 import api from "../api";
+import { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [submitting, setSubmitting] = useState(false);
     const navigate = useNavigate();
     async function handleLogin(e) {
         e.preventDefault();
@@ -22,6 +24,7 @@ function Login(props) {
             }
         };
 
+        setSubmitting(true);
         api.post('/auth/', data, config)
             .then((response) => {
                 console.log(JSON.stringify(response.data));
@@ -33,6 +36,7 @@ function Login(props) {
             .catch((error) => {
                 console.log(error);
                 setError('Invalid username or password');
+                setSubmitting(false);
             });
     }
     function checkLoginStatus(){
@@ -53,6 +57,7 @@ function Login(props) {
         })
         .catch((error) => {
           console.log(error);
+          setSubmitting(false);
         });
 
     }
@@ -142,8 +147,10 @@ function Login(props) {
                                 <button
                                     type="submit"
                                     className="btn btn-primary w-100"
+                                    disabled={submitting}
                                 >
 
+                                    {submitting && <ButtonSpinner />}
                                     Login
 
                                 </button>

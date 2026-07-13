@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ViewAppointments() {
 
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cancellingId, setCancellingId] = useState(null);
 
     useEffect(() => {
 
@@ -31,6 +33,7 @@ function ViewAppointments() {
 
         const token = localStorage.getItem("token");
 
+        setCancellingId(id);
         api.delete(`/appointments/${id}/`, {
             headers: {
                 Authorization: `Token ${token}`
@@ -47,12 +50,15 @@ function ViewAppointments() {
         })
         .catch((error) => {
             console.log(error);
+        })
+        .finally(() => {
+            setCancellingId(null);
         });
     }
 
     // Loading state
     if (loading) {
-        return <div className="text-center mt-5">Loading...</div>;
+        return <PageLoader />;
     }
 
     return (
@@ -129,8 +135,10 @@ function ViewAppointments() {
 
                                                 <button
                                                     className="btn btn-danger btn-sm"
+                                                    disabled={cancellingId === appointment.id}
                                                     onClick={() => cancelAppointment(appointment.id)}
                                                 >
+                                                    {cancellingId === appointment.id && <ButtonSpinner />}
                                                     Cancel
                                                 </button>
 

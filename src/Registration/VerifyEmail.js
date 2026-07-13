@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function VerifyEmail() {
     const { token } = useParams();
@@ -11,6 +12,7 @@ function VerifyEmail() {
 
     const [resendEmail, setResendEmail] = useState("");
     const [resendStatus, setResendStatus] = useState("");
+    const [resending, setResending] = useState(false);
 
     useEffect(() => {
 
@@ -40,6 +42,8 @@ function VerifyEmail() {
 
         try {
 
+            setResending(true);
+
             const response = await api.post(
                 "/resend_verification_email/",
                 { username: resendEmail }
@@ -54,6 +58,9 @@ function VerifyEmail() {
                 error.response?.data?.message ||
                 "Something went wrong. Please try again."
             );
+        }
+        finally {
+            setResending(false);
         }
     }
 
@@ -78,10 +85,7 @@ function VerifyEmail() {
                         <div className="card-body">
 
                             {status === "loading" && (
-
-                                <p className="text-center mb-0">
-                                    Verifying your email...
-                                </p>
+                                <PageLoader text="Verifying your email..." />
                             )}
 
                             {status === "success" && (
@@ -138,7 +142,9 @@ function VerifyEmail() {
                                         <button
                                             type="submit"
                                             className="btn btn-success w-100"
+                                            disabled={resending}
                                         >
+                                            {resending && <ButtonSpinner />}
                                             Resend Verification Email
                                         </button>
 

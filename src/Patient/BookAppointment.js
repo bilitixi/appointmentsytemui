@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router";
 import api from "../api";
+import { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function BookAppointment() {
     const navigate = useNavigate()
     const [errors, setErrors] = useState([]);
+    const [submitting, setSubmitting] = useState(false);
 
     const today = new Date().toISOString().split("T")[0];
 
@@ -47,6 +49,7 @@ function BookAppointment() {
 
         const token = localStorage.getItem("token");
 
+        setSubmitting(true);
         api.post(
             "/appointment_slots/",
             formData,
@@ -70,7 +73,8 @@ function BookAppointment() {
 
 
 
-        });
+        })
+        .finally(() => setSubmitting(false));
     }
 
     return (
@@ -200,7 +204,9 @@ function BookAppointment() {
                                     <button
                                         type="submit"
                                         className="btn btn-primary"
+                                        disabled={submitting}
                                     >
+                                        {submitting && <ButtonSpinner />}
                                         Book Appointment
                                     </button>
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function EditPatientAppointment() {
   const { appointmentSlotID } = useParams();
@@ -21,6 +22,8 @@ function EditPatientAppointment() {
   });
 
   const [lastUpdate, setLastUpdate] = useState("");
+  const [loading, setLoading] = useState(isEditMode);
+  const [submitting, setSubmitting] = useState(false);
 
   function parseErrors(error) {
     const data = error.response?.data;
@@ -70,7 +73,8 @@ function EditPatientAppointment() {
 
         setLastUpdate(data.updated_at);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   }, [appointmentSlotID, isEditMode]);
 
   // Handle input change
@@ -105,6 +109,7 @@ function EditPatientAppointment() {
           }
         );
 
+    setSubmitting(true);
     request
       .then(() => {
         alert(
@@ -118,8 +123,11 @@ function EditPatientAppointment() {
         const error = parseErrors(err);
         alert(error);
         console.log(err);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
+
+  if (loading) return <PageLoader />;
 
   return (
     <div className="container mt-4">
@@ -208,7 +216,8 @@ function EditPatientAppointment() {
           </div>
 
           {/* Submit */}
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn btn-primary w-100" disabled={submitting}>
+            {submitting && <ButtonSpinner />}
             {isEditMode ? "Update Slot" : "Create Slot"}
           </button>
         </form>

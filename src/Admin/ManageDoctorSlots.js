@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function ManageDoctorSlots() {
   const { id } = useParams();
 
   const [doctorData, setDoctorData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     loadSlots();
@@ -39,6 +41,7 @@ function ManageDoctorSlots() {
     if (!window.confirm("Delete this slot?")) return;
 
     try {
+      setDeletingId(slotId);
       await api.delete(
         `/appointment_slots/${slotId}/`,
         {
@@ -48,13 +51,15 @@ function ManageDoctorSlots() {
         }
       );
 
-      loadSlots();
+      await loadSlots();
     } catch (error) {
       console.error(error);
+    } finally {
+      setDeletingId(null);
     }
   };
 
-  if (loading) return <h3>Loading...</h3>;
+  if (loading) return <PageLoader />;
   if (!doctorData) return <h3>No data found</h3>;
 
   const groupedSlots = doctorData.grouped_slots || {};
@@ -123,8 +128,10 @@ function ManageDoctorSlots() {
 
                         <button
                           className="btn btn-warning btn-sm"
+                          disabled={deletingId === slot.id}
                           onClick={() => deleteSlot(slot.id)}
                         >
+                          {deletingId === slot.id && <ButtonSpinner />}
                           Delete
                         </button>
                       </div>

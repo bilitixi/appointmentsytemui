@@ -1,9 +1,12 @@
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 import api from "../api";
+import { ButtonSpinner } from "./LoadingSpinner";
 
 function Navigation() {
 
     const navigate = useNavigate();
+    const [loggingOut, setLoggingOut] = useState(false);
 
     // check if user is logged in
     const isAuthenticated =
@@ -11,6 +14,7 @@ function Navigation() {
 
     async function handleLogout() {
         const token = localStorage.getItem("token");
+        setLoggingOut(true);
         try {
             await api.get(
                 "/logout/",
@@ -83,7 +87,9 @@ function Navigation() {
                                 <button
                                     onClick={handleLogout}
                                     className="btn btn-link nav-link"
+                                    disabled={loggingOut}
                                 >
+                                    {loggingOut && <ButtonSpinner />}
                                     Logout
                                 </button>
 

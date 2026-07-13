@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router";
 import api from "../api";
+import PageLoader from "../Components/LoadingSpinner";
 
 function PatientDashboard(props) {
     const [patient, setPatient] = useState('')
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate()
 
 
@@ -27,9 +29,14 @@ function PatientDashboard(props) {
         .catch((error) => {
             console.log(error);
             navigate("/error");
+        })
+        .finally(() => {
+            setLoading(false);
         });
 
     }, []);
+
+    if (loading) return <PageLoader />;
 
     return (
         <div className="container py-5">

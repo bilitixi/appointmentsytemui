@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function PatientForm() {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  const [loading, setLoading] = useState(!!id);
+  const [submitting, setSubmitting] = useState(false);
 
   const [patient, setPatient] = useState({
     firstName: "",
@@ -56,6 +60,8 @@ function PatientForm() {
             } catch (error) {
 
               console.error(error);
+            } finally {
+              setLoading(false);
             }
           };
       loadPatient();
@@ -73,6 +79,7 @@ function PatientForm() {
 
 
           try {
+              setSubmitting(true);
               await api.put(
                   `/patients/${id}/`,
                   patient,
@@ -85,12 +92,15 @@ function PatientForm() {
               alert(errors.join("\n"));
               console.error(error);
 
+          } finally {
+              setSubmitting(false);
           }
 
 
 
   }
 
+  if (loading) return <PageLoader />;
 
   return (
     <div className="container py-5">
@@ -163,7 +173,8 @@ function PatientForm() {
                 Cancel
               </Link>
 
-              <button type="submit" className="btn btn-primary">
+              <button type="submit" className="btn btn-primary" disabled={submitting}>
+                {submitting && <ButtonSpinner />}
                 Update
               </button>
             </div>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import api from "../api";
+import PageLoader, { ButtonSpinner } from "../Components/LoadingSpinner";
 
 function AppointmentSlotForm() {
   const navigate = useNavigate();
   const { slotid, doctorid } = useParams();
   const [doctorID, setDoctorID] = useState()
+  const [loading, setLoading] = useState(!!slotid);
+  const [submitting, setSubmitting] = useState(false);
 
   const [slot, setSlot] = useState({
     date: "",
@@ -52,6 +55,7 @@ function AppointmentSlotForm() {
     };
 
     try {
+      setSubmitting(true);
       if (slotid) {
         // Update slot
         await api.put(
@@ -77,6 +81,8 @@ function AppointmentSlotForm() {
       console.error(error);
       const errors = parseErrors(error);
       alert(errors.join("\n"));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -102,11 +108,15 @@ function AppointmentSlotForm() {
         setDoctorID(response.data.doctor);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadSlot();
   }, [slotid,doctorid]);
+
+  if (loading) return <PageLoader />;
 
   return (
     <div className="container py-5">
@@ -176,7 +186,9 @@ function AppointmentSlotForm() {
               <button
                 type="submit"
                 className="btn btn-primary"
+                disabled={submitting}
               >
+                {submitting && <ButtonSpinner />}
                 {slotid ? "Update" : "Save"}
               </button>
             </div>
