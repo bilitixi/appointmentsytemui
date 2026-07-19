@@ -113,6 +113,28 @@ function PatientDashboard(props) {
                     </div>
                 </div>
 
+                {/* My Account */}
+                <div className="col-md-4">
+                    <div className="card text-center shadow-sm h-100">
+                        <div className="card-body">
+                            <h5 className="card-title">
+                                My Account
+                            </h5>
+
+                            <p className="card-text">
+                                Update your details or manage your account.
+                            </p>
+
+                            <Link
+                                to="/myAccount"
+                                className="btn btn-secondary"
+                            >
+                                My Account
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>

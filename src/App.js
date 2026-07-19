@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "./Components/Navigation";
 import Options from "./Components/Options";
 import PatientDashboard from "./Patient/PatientDashboard";
+import MyAccount from "./Patient/MyAccount";
 import AdminDashboard from "./Admin/AdminDashboard";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import Error from "./Components/Error";
@@ -42,6 +43,11 @@ function App() {
           <Route path="/patientDashboard" element={
               <ProtectedRoute role="patient">
               <PatientDashboard/>
+              </ProtectedRoute>}/>
+
+          <Route path="/myAccount" element={
+              <ProtectedRoute role="patient">
+              <MyAccount/>
               </ProtectedRoute>}/>
 
           <Route path="/viewdoctors" element={
